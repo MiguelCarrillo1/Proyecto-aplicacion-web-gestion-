@@ -1,0 +1,256 @@
+/* Reset y estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif; /* Tipografía más moderna */
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1, h2 {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #d3222a;
+}
+
+/* Cabecera */
+.header {
+    background-color: #333;
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Añadí sombra para darle más profundidad */
+}
+
+.header .logo {
+    max-height: 50px; /* Reduje un poco el tamaño de la logo para que se vea más armónico */
+    width: auto;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.header-buttons button {
+    background-color: #d3222a;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 25px; /* Hice los botones más redondeados */
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+.header-buttons button:hover {
+    background-color: #b71b23;
+}
+
+.header-buttons button:active {
+    transform: scale(0.98);
+}
+
+/* Contenedores principales */
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Formulario */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input, select, textarea, button {
+    padding: 14px;
+    margin: 12px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.2s ease-in-out;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #d3222a;
+    outline: none; /* Elimina el borde azul por defecto */
+}
+
+input[type="text"], input[type="number"], input[type="email"], textarea, select {
+    max-width: 100%;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+button {
+    background-color: #d3222a;
+    color: white;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+    padding: 14px;
+}
+
+button:hover {
+    background-color: #b71b23;
+}
+
+button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Estilos de tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+    color: #333;
+}
+
+th {
+    background-color: #a4383d;
+    color: #fff;
+}
+
+tr:hover td {
+    background-color: #f7f7f7;
+}
+
+/* Paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.pagination a {
+    padding: 10px 15px;
+    background-color: #3f51b5;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px; /* Redondeé los bordes */
+    transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+.pagination a:hover {
+    background-color: #303f9f;
+}
+
+.pagination a:active {
+    transform: scale(0.98);
+}
+
+/* Sección visible */
+section {
+    display: none;
+}
+
+section.active {
+    display: block;
+}
+
+/* Estilo de los botones para mostrar secciones */
+button.show-section {
+    margin-top: 15px;
+    background-color: #3f51b5;
+    color: white;
+    font-size: 16px;
+    border-radius: 25px;
+    transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+button.show-section:hover {
+    background-color: #303f9f;
+}
+
+button.show-section:active {
+    transform: scale(0.98);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-buttons {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    table, th, td {
+        width: 100%;
+        display: block;
+        text-align: right;
+    }
+
+    th, td {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .header .logo {
+        margin-bottom: 10px;
+    }
+}
+
+/* Estilos para inputs inválidos */
+input:invalid, textarea:invalid, select:invalid {
+    border-color: red;
+}
+
+/* Estilo para encabezados de formularios */
+form h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Estilos para el botón de "Cancelar" */
+button.cancel {
+    background-color: #ccc;
+    color: #333;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+button.cancel:hover {
+    background-color: #bbb;
+}
+
