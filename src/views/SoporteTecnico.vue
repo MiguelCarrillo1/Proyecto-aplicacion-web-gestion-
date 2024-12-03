@@ -22,7 +22,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="caso in casos" :key="caso.id">
+        <tr v-for="caso in casos" :key="caso.codigo">
           <td>{{ caso.codigo }}</td>
           <td>{{ caso.activo }}</td>
           <td>{{ caso.fecha }}</td>
@@ -60,10 +60,7 @@ export default {
   name: 'SoporteTecnico',
   data() {
     return {
-      casos: [
-        { codigo: 'ACT1234', activo: 'Computadora HP', fecha: '2023-06-10', descripcion: 'Pantalla rota', estado: 'En reparación' },
-        { codigo: 'ACT2345', activo: 'Impresora Canon', fecha: '2023-08-22', descripcion: 'Cartucho vacío', estado: 'Resuelto' }
-      ],
+      casos: [],  // Lista de casos cargada desde localStorage
       isFormularioVisible: false, // Control de visibilidad del formulario
       nuevoCaso: {
         codigo: '',
@@ -74,7 +71,21 @@ export default {
       }
     };
   },
+  created() {
+    this.obtenerCasos(); // Cargar los datos de casos desde localStorage al iniciar
+  },
   methods: {
+    // Método para recuperar los casos desde localStorage
+    obtenerCasos() {
+      const casos = localStorage.getItem('casos');
+      this.casos = casos ? JSON.parse(casos) : [];
+    },
+
+    // Método para guardar los casos en localStorage
+    guardarEnLocalStorage() {
+      localStorage.setItem('casos', JSON.stringify(this.casos));
+    },
+
     mostrarFormulario() {
       this.isFormularioVisible = true;
     },
@@ -85,10 +96,11 @@ export default {
       this.nuevoCaso = { codigo: '', activo: '', fecha: '', descripcion: '', estado: 'En reparación' }; // Resetea el formulario
     },
 
-    // Registrar un nuevo caso
+    // Registrar un nuevo caso y actualizar localStorage
     registrarCaso() {
       if (this.nuevoCaso.codigo && this.nuevoCaso.activo && this.nuevoCaso.fecha && this.nuevoCaso.descripcion && this.nuevoCaso.estado) {
         this.casos.push({ ...this.nuevoCaso });
+        this.guardarEnLocalStorage(); // Guardar los datos actualizados en localStorage
         this.cancelarFormulario();
       } else {
         alert('Por favor, complete todos los campos.');
@@ -157,6 +169,7 @@ export default {
         try {
           const data = JSON.parse(e.target.result);
           this.casos = data;
+          this.guardarEnLocalStorage(); // Actualizar localStorage después de importar los casos
         } catch (error) {
           alert('Error al procesar el archivo JSON.');
         }
@@ -187,6 +200,7 @@ export default {
           });
 
           this.casos = casos;
+          this.guardarEnLocalStorage(); // Actualizar localStorage después de importar los casos
         } catch (error) {
           alert('Error al procesar el archivo XML.');
         }

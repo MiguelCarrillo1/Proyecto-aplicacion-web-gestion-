@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="baja in bajas" :key="baja.id">
+        <tr v-for="baja in bajas" :key="baja.codigo">
           <td>{{ baja.codigo }}</td>
           <td>{{ baja.activo }}</td>
           <td>{{ baja.fecha }}</td>
@@ -52,10 +52,7 @@
 export default {
   data() {
     return {
-      bajas: [
-        { codigo: 'ACT1234', activo: 'Impresora Canon', fecha: '2023-10-10', motivo: 'No es reparable' },
-        { codigo: 'ACT2345', activo: 'Proyector Epson', fecha: '2023-11-01', motivo: 'Obsoleto' }
-      ],
+      bajas: this.obtenerBajas(), // Recupera las bajas desde localStorage al cargar la página
       isFormularioVisible: false, // Control de visibilidad del formulario
       nuevaBaja: {
         codigo: '',
@@ -66,6 +63,16 @@ export default {
     };
   },
   methods: {
+    // Recupera las bajas desde localStorage
+    obtenerBajas() {
+      const bajasGuardadas = localStorage.getItem('bajas');
+      if (bajasGuardadas) {
+        return JSON.parse(bajasGuardadas);
+      } else {
+        return [];
+      }
+    },
+
     mostrarFormulario() {
       this.isFormularioVisible = true;
     },
@@ -80,6 +87,8 @@ export default {
     darDeBaja() {
       if (this.nuevaBaja.codigo && this.nuevaBaja.activo && this.nuevaBaja.fecha && this.nuevaBaja.motivo) {
         this.bajas.push({ ...this.nuevaBaja });
+        // Guardar las bajas en localStorage
+        localStorage.setItem('bajas', JSON.stringify(this.bajas));
         this.cancelarFormulario();
       } else {
         alert('Por favor, complete todos los campos.');
@@ -147,6 +156,8 @@ export default {
         try {
           const data = JSON.parse(e.target.result);
           this.bajas = data;
+          // Guardar en localStorage
+          localStorage.setItem('bajas', JSON.stringify(this.bajas));
         } catch (error) {
           alert('Error al procesar el archivo JSON.');
         }
@@ -176,6 +187,8 @@ export default {
           });
 
           this.bajas = bajas;
+          // Guardar en localStorage
+          localStorage.setItem('bajas', JSON.stringify(this.bajas));
         } catch (error) {
           alert('Error al procesar el archivo XML.');
         }

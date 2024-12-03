@@ -66,10 +66,7 @@ export default {
   name: 'RegistroActivos',
   data() {
     return {
-      activos: [
-        { nombre: 'Computadora HP', codigo: 'ACT1234', categoria: 'Electrónica', fechaAdquisicion: '2023-05-01', valor: 1200, descripcion: 'Computadora de escritorio', estado: 'Operativo' },
-        { nombre: 'Impresora Canon', codigo: 'ACT2345', categoria: 'Electrónica', fechaAdquisicion: '2023-06-15', valor: 450, descripcion: 'Impresora multifuncional', estado: 'Operativo' }
-      ],
+      activos: JSON.parse(localStorage.getItem('activos')) || [], // Recupera los datos desde localStorage si existen
       isFormularioVisible: false, // Controla la visibilidad del formulario
       nuevoActivo: {
         nombre: '',
@@ -101,12 +98,20 @@ export default {
         // Agrega el nuevo activo al array de activos
         this.activos.push({ ...this.nuevoActivo });
 
+        // Actualiza localStorage después de agregar el nuevo activo
+        this.actualizarLocalStorage();
+
         // Limpia el formulario después de la asignación
         this.cancelarFormulario();
       } else {
         // Si algún campo está vacío, muestra un mensaje de alerta
         alert('Por favor, complete todos los campos.');
       }
+    },
+
+    // Actualiza el localStorage con los datos más recientes
+    actualizarLocalStorage() {
+      localStorage.setItem('activos', JSON.stringify(this.activos));
     },
 
     // Exporta los activos a un archivo JSON
@@ -173,6 +178,7 @@ export default {
         try {
           const data = JSON.parse(e.target.result);
           this.activos = data;
+          this.actualizarLocalStorage(); // Actualiza localStorage después de importar los datos
         } catch (error) {
           alert('Error al procesar el archivo JSON.');
         }
@@ -205,6 +211,7 @@ export default {
           });
 
           this.activos = activos;
+          this.actualizarLocalStorage(); // Actualiza localStorage después de importar los datos
         } catch (error) {
           alert('Error al procesar el archivo XML.');
         }

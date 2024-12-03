@@ -56,11 +56,7 @@ export default {
   name: 'AsignacionActivos',
   data() {
     return {
-      asignaciones: [
-        // Ejemplo de asignaciones previas (se agregarán los nuevos datos del formulario aquí)
-        { codigo: 'ACT1234', departamento: 'IT', ubicacion: 'Piso 2', fecha: '2023-05-02', responsable: 'Juan Pérez' },
-        { codigo: 'ACT2345', departamento: 'Recursos Humanos', ubicacion: 'Piso 3', fecha: '2023-06-16', responsable: 'María López' }
-      ],
+      asignaciones: this.obtenerAsignaciones(), // Recupera las asignaciones desde localStorage al cargar la página
       isFormularioVisible: false, // Control de visibilidad del formulario
       nuevoActivo: {
         codigo: '',
@@ -72,6 +68,16 @@ export default {
     };
   },
   methods: {
+    // Recupera las asignaciones desde localStorage
+    obtenerAsignaciones() {
+      const asignacionesGuardadas = localStorage.getItem('asignaciones');
+      if (asignacionesGuardadas) {
+        return JSON.parse(asignacionesGuardadas);
+      } else {
+        return [];
+      }
+    },
+
     // Muestra el formulario para asignar un nuevo activo
     mostrarFormulario() {
       this.isFormularioVisible = true;
@@ -83,12 +89,15 @@ export default {
       this.nuevoActivo = { codigo: '', departamento: '', ubicacion: '', fecha: '', responsable: '' }; // Resetea el formulario
     },
 
-    // Asigna el nuevo activo a la lista de asignaciones
+    // Asigna el nuevo activo a la lista de asignaciones y guarda en localStorage
     asignarActivo() {
       // Verifica que todos los campos del formulario están completos
       if (this.nuevoActivo.codigo && this.nuevoActivo.departamento && this.nuevoActivo.ubicacion && this.nuevoActivo.fecha && this.nuevoActivo.responsable) {
         // Agregar el nuevo activo al array de asignaciones
         this.asignaciones.push({ ...this.nuevoActivo });
+
+        // Guardar las asignaciones en localStorage
+        localStorage.setItem('asignaciones', JSON.stringify(this.asignaciones));
         
         // Limpiar el formulario después de la asignación
         this.cancelarFormulario();
@@ -151,6 +160,8 @@ export default {
           const data = JSON.parse(e.target.result);
           if (Array.isArray(data)) {
             this.asignaciones = data;
+            // Guardar en localStorage
+            localStorage.setItem('asignaciones', JSON.stringify(this.asignaciones));
           } else {
             alert('El archivo JSON no contiene datos válidos.');
           }
@@ -179,6 +190,8 @@ export default {
             responsable: asignacionNode.getElementsByTagName('responsable')[0].textContent
           }));
           this.asignaciones = asignaciones;
+          // Guardar en localStorage
+          localStorage.setItem('asignaciones', JSON.stringify(this.asignaciones));
         } catch (error) {
           alert('Error al procesar el archivo XML.');
         }

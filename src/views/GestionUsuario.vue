@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="usuario in usuarios" :key="usuario.id">
+        <tr v-for="usuario in usuarios" :key="usuario.cedula">
           <td>{{ usuario.nombre }}</td>
           <td>{{ usuario.email }}</td>
           <td>{{ usuario.cedula }}</td>
@@ -58,10 +58,7 @@
 export default {
   data() {
     return {
-      usuarios: [
-        { nombre: 'Juan Pérez', email: 'juan.perez@uleam.edu.ec', cedula: '1234567890', cargo: 'Administrador', departamento: 'IT', rol: 'Administrador' },
-        { nombre: 'María López', email: 'maria.lopez@uleam.edu.ec', cedula: '0987654321', cargo: 'Operador', departamento: 'Soporte', rol: 'Operador' }
-      ],
+      usuarios: [], // Lista de usuarios cargada desde localStorage
       isFormularioVisible: false, // Control de visibilidad del formulario
       nuevoUsuario: {
         nombre: '',
@@ -73,7 +70,21 @@ export default {
       }
     };
   },
+  created() {
+    this.obtenerBajas(); // Cargar los datos de usuarios desde localStorage al iniciar
+  },
   methods: {
+    // Método para recuperar los datos desde localStorage
+    obtenerBajas() {
+      const bajas = localStorage.getItem('bajas');
+      this.usuarios = bajas ? JSON.parse(bajas) : [];
+    },
+
+    // Método para guardar los datos en localStorage
+    guardarEnLocalStorage() {
+      localStorage.setItem('bajas', JSON.stringify(this.usuarios));
+    },
+
     mostrarFormulario() {
       this.isFormularioVisible = true;
     },
@@ -84,10 +95,11 @@ export default {
       this.nuevoUsuario = { nombre: '', email: '', cedula: '', cargo: '', departamento: '', rol: '' }; // Resetea el formulario
     },
 
-    // Registrar un nuevo usuario
+    // Registrar un nuevo usuario y actualizar localStorage
     registrarUsuario() {
       if (this.nuevoUsuario.nombre && this.nuevoUsuario.email && this.nuevoUsuario.cedula && this.nuevoUsuario.cargo && this.nuevoUsuario.departamento && this.nuevoUsuario.rol) {
         this.usuarios.push({ ...this.nuevoUsuario });
+        this.guardarEnLocalStorage(); // Guardar los datos actualizados en localStorage
         this.cancelarFormulario();
       } else {
         alert('Por favor, complete todos los campos.');
@@ -157,6 +169,7 @@ export default {
         try {
           const data = JSON.parse(e.target.result);
           this.usuarios = data;
+          this.guardarEnLocalStorage(); // Actualizar localStorage después de importar los datos
         } catch (error) {
           alert('Error al procesar el archivo JSON.');
         }
@@ -188,6 +201,7 @@ export default {
           });
 
           this.usuarios = usuarios;
+          this.guardarEnLocalStorage(); // Actualizar localStorage después de importar los datos
         } catch (error) {
           alert('Error al procesar el archivo XML.');
         }
